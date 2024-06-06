@@ -1,0 +1,60 @@
+# This file includes a series of comments. Each comment is marked 
+# by a # character as the first character in the line.
+#
+# This is a comment!
+
+# Meta-analysis weighted by standard error does not work well
+# when different studies used very different transformations.
+# In this case, some attempt was made to use similar trait
+# transformation and you can request a standard error based
+# analysis by uncommenting the following line:
+SCHEME   STDERR
+#SCHEME	 SAMPLESIZE
+
+# Usually, it is a good to apply genomic control to each
+# input file. However, in this example, all the markers being
+# examined reside in strongly associated loci and it probably 
+# is not a good idea. To find out what happens if you turn
+# on genomic control, uncomment the following line.
+# GENOMICCONTROL ON
+
+# To help identify allele flips, it can be useful to track
+# allele frequencies in the meta-analysis. To enable this
+# capability, uncomment the following two lines.
+# AVERAGEFREQ ON
+# MINMAXFREQ ON
+
+# To restric meta-analysis to two previously reported SNPs
+# and summarize study specific results, uncomment the two
+# lines that follow.
+# ADDFILTER SNP IN (rs10830963,rs563694)
+# VERBOSE ON
+
+# Describe and process the kunkle gwas
+MARKER   MarkerName
+#WEIGHT   Neff
+DEFAULT 63926
+ALLELE   Effect_allele Non_Effect_allele
+# FREQ     group_freq
+EFFECT   Beta
+STDERR   SE
+PVAL     Pvalue
+
+PROCESS ../../data/alzheimers_data/Kunkle_etal_Stage1_results.txt
+
+# Describe and process the Finngen GWAS
+MARKER   rsids
+ALLELE   alt ref 
+FREQ     af_alt
+#WEIGHT   Neff2
+DEFAULT 412181
+EFFECT   beta
+STDERR   sebeta
+PVAL     pval
+
+PROCESS ../../data/alzheimers_data/finngen_R10_G6_AD_WIDE
+
+
+# Execute meta-analysis
+OUTFILE ../../data/alzheimers_data/metal_AD_WIDE .txt
+ANALYZE HETEROGENEITY
